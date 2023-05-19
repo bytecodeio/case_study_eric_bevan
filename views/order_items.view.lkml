@@ -83,20 +83,7 @@ view: order_items {
   dimension: sale_price {
     type: number
     sql: ${TABLE}.sale_price ;;
-  }
-
-  # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
-  # measures for this dimension, but you can also add measures of many different aggregates.
-  # Click on the type parameter to see all the options in the Quick Help panel on the right.
-
-  measure: total_sale_price {
-    type: sum
-    sql: ${sale_price} ;;
-  }
-
-  measure: average_sale_price {
-    type: average
-    sql: ${sale_price} ;;
+    value_format_name: usd
   }
 
   dimension_group: shipped {
@@ -113,16 +100,110 @@ view: order_items {
     sql: ${TABLE}.shipped_at ;;
   }
 
+  dimension: status {
+    type: string
+    sql:  ${TABLE}.status ;;
+  }
+
   dimension: user_id {
     type: number
     # hidden: yes
     sql: ${TABLE}.user_id ;;
   }
 
-  measure: count {
-    type: count
+  dimension: sale_complete_indicator {
+    type: yesno
+    sql:  ${status} IN ('Completed','Shipped','Processing') ;;
+  }
+
+
+
+  # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
+  # measures for this dimension, but you can also add measures of many different aggregates.
+  # Click on the type parameter to see all the options in the Quick Help panel on the right.
+
+
+  measure: average_sale_price {
+    description: "Average sale price of items sold"
+    type: average
+    sql: ${sale_price} ;;
+    value_format_name: usd
+  }
+
+  measure: average_spend_per_customer {
+    description: "Total Sale Price / total number of customers"
+    type: number
+    value_format_name: usd
+    sql:  ${total_sale_price} / NULLIF( ${number_of_customers_with_sales}, 0);;
+    drill_fields: [users.age_tier, users.gender, average_spend_per_customer]
+  }
+
+  measure: count_order_items {
+    type: count_distinct
+    sql: ${id} ;;
     drill_fields: [detail*]
   }
+
+  measure: cumulative_total_sales_price {
+    description: "A cumulative or running total of sales price"
+    type: running_total
+    sql: ${total_sale_price} ;;
+    value_format_name:  usd
+  }
+
+  measure: item_return_rate {
+    description: "Number of Items Returned / total number of items sold"
+    type: number
+    sql: ${number_of_items_returned} / NULLIF(${count_order_items}, 0) ;;
+    value_format_name: percent_1
+  }
+
+  measure: number_of_customers_with_sales {
+    description: "Number of users who have ordered an item at some point"
+    type: count_distinct
+    sql: ${user_id} ;;
+    # filters: [status: "Returned"]
+  }
+
+  measure: number_of_customers_returning_items {
+    description: "Number of users who have returned an item at some point"
+    type: count_distinct
+    sql: ${user_id} ;;
+    filters: [status: "Returned"]
+  }
+
+  measure: number_of_items_returned {
+    description: "Number of items that were returned by dissatisfied customers"
+    type: count_distinct
+    sql:  ${id} ;;
+    filters: [status: "Returned"]
+    value_format: "#,###"
+  }
+
+  measure: percent_users_with_returns {
+    description: "Number of Customer Returning Items / total number of customers"
+    type:  number
+    value_format_name: percent_1
+    sql:  ${number_of_customers_with_sales} / NULLIF(${number_of_customers_returning_items}, 0);;
+  }
+
+  measure: total_gross_revenue {
+    description: "Total revenue from completed sales (cancelled and returned orders excluded)"
+    type: sum
+    sql: ${sale_price} ;;
+    value_format_name: usd
+    filters: [sale_complete_indicator: "Yes"]
+    drill_fields: [products.cateogry, products.name, total_gross_revenue]
+  }
+
+  measure: total_sale_price {
+    description: "Total sales from Items sold"
+    type: sum
+    sql: ${sale_price} ;;
+    value_format_name: usd
+  }
+
+
 
   # ----- Sets of fields for drilling ------
   set: detail {

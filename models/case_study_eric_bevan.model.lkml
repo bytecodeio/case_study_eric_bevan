@@ -2,7 +2,13 @@
 connection: "looker_partner_demo"
 
 # include all the views
-include: "/views/**/*.view"
+include: "/views/inventory_cross_view.view"
+include: "/views/inventory_items.view"
+include: "/views/order_items.view"
+include: "/views/users.view"
+include: "/views/distribution_centers.view"
+include: "/views/events.view"
+include: "/views/products.view"
 
 # Datagroups define a caching policy for an Explore. To learn more,
 # use the Quick Help panel on the right to see documentation.
@@ -50,6 +56,7 @@ explore: products {
 }
 
 explore: events {
+  label: "Sales Events"
   join: users {
     type: left_outer
     sql_on: ${events.user_id} = ${users.id} ;;
@@ -57,9 +64,13 @@ explore: events {
   }
 }
 
-explore: users {}
+explore: users {
+  label: "Customers"
+}
 
 explore: order_items {
+  # group_label: "Online Store Analysis"
+  label: "Sales"
   join: users {
     type: left_outer
     sql_on: ${order_items.user_id} = ${users.id} ;;
@@ -71,6 +82,12 @@ explore: order_items {
     sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
     relationship: many_to_one
   }
+
+  join: inventory_cross_view {
+    view_label: "Order Items"
+    sql:  ;;
+  relationship: one_to_one
+}
 
   join: products {
     type: left_outer

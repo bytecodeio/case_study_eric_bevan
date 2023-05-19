@@ -21,6 +21,16 @@ view: products {
   dimension: brand {
     type: string
     sql: ${TABLE}.brand ;;
+    link: {
+      label: "Google Search"
+      url: "http://www.google.com/search?q={{ value }}"
+      icon_url: "http://google.com/favicon.ico"
+    }
+    link: {
+      label: "Facebook Search"
+      url: "https://www.facebook.com/search/top/?q={{ value }}=SEARCH_BOX"
+      icon_url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAA1UlEQVR4AWOwDp9LUzTELRi1wDdtaf+8w9sPXDtx7h4Q7Tt2c92OS9SxwCZibtesg0+fv3756i0aoo4FkxcdgxhHEwtiite8ePmGhhas3HIB2cRL1x5t3HV5xebzEEQFC67efAI3/cDxW7aR86icip6/QIRP9+xD1E+myOHTPv3AqAVA1DJ1/76jN+EI2YKLVx8hS+0+cgMY5yRbMHfVKbBxhNGFqw+B6mloweY9V2hrAbAIIceCugl7gE6DI2QTT124jyyVXrNxEKaiUQtGLRi1YNQCAMs01I34bbYCAAAAAElFTkSuQmCC"
+    }
   }
 
   dimension: category {

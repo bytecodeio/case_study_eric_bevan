@@ -4,7 +4,7 @@ view: users {
   # to be used for all fields in this view.
   sql_table_name: `thelook.users`
     ;;
-  drill_fields: [id]
+  drill_fields: [id, age_tier, gender, new_customer_indicator]
   # This primary key is the unique key for this table in the underlying database.
   # You need to define a primary key in a view in order to join to other views.
 
@@ -21,6 +21,19 @@ view: users {
   dimension: age {
     type: number
     sql: ${TABLE}.age ;;
+  }
+
+  dimension: age_tier {
+    type:  tier
+    tiers: [15, 26, 36, 51, 66]
+    sql: ${age} ;;
+    style:  integer
+  }
+
+  dimension: new_customer_indicator {
+    type:  yesno
+    sql: ${created_date} >= DATE_ADD(CURRENT_DATE(), INTERVAL -90 DAY);;
+
   }
 
   # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
@@ -46,6 +59,7 @@ view: users {
     type: string
     map_layer_name: countries
     sql: ${TABLE}.country ;;
+    drill_fields: [state]
   }
 
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
@@ -116,7 +130,9 @@ view: users {
   }
 
   measure: count {
-    type: count
+    label: "Count of Users"
+    type: count_distinct
+    sql: ${id} ;;
     drill_fields: [id, last_name, first_name, events.count, order_items.count]
   }
 }

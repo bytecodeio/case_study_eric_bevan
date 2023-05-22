@@ -144,6 +144,12 @@ view: order_items {
     drill_fields: [detail*]
   }
 
+  measure: count_orders {
+    type: count_distinct
+    sql: ${order_id} ;;
+    drill_fields: [detail*]
+  }
+
   measure: cumulative_total_sales_price {
     description: "A cumulative or running total of sales price"
     type: running_total
@@ -157,6 +163,19 @@ view: order_items {
     sql: ${number_of_items_returned} / NULLIF(${count_order_items}, 0) ;;
     value_format_name: percent_1
   }
+
+  measure: order_date_earliest {
+    description: "The earliest or first order date"
+    type:  date
+    sql:   MIN(${created_raw});;
+  }
+
+  measure: order_date_latest {
+    description: "The latest or last order date"
+    type:  date
+    sql:   MAX(${created_raw});;
+  }
+
 
   measure: number_of_customers_with_sales {
     description: "Number of users who have ordered an item at some point"

@@ -9,6 +9,7 @@ include: "/views/users.view"
 include: "/views/distribution_centers.view"
 include: "/views/events.view"
 include: "/views/products.view"
+include: "/views/user_sales_rollup.view"
 
 # Datagroups define a caching policy for an Explore. To learn more,
 # use the Quick Help panel on the right to see documentation.
@@ -66,6 +67,11 @@ explore: events {
 
 explore: users {
   label: "Customers"
+  join: user_sales_rollup {
+    type: left_outer
+    sql_on: ${users.id} = ${user_sales_rollup.user_id} ;;
+    relationship: one_to_one
+  }
 }
 
 explore: order_items {

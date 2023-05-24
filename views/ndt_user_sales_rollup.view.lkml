@@ -1,7 +1,7 @@
 
 # include: "case_study_eric_bevan.model.lkml"
 
-  view: user_sales_rollup {
+  view: ndt_user_sales_rollup {
     derived_table: {
       explore_source: order_items {
         column: user_id {}
@@ -9,18 +9,25 @@
         column: total_gross_revenue {}
         column: order_date_earliest {}
         column: order_date_latest {}
+       filters: [order_items.count_orders : "NOT NULL"]
       }
+
+
+    # interval_trigger: "1 hour"
+
     }
     dimension: user_id {
       description: "User Id"
       primary_key: yes
       type: number
+      sql:  ${TABLE}.user_id ;;
       value_format_name: id
     }
     dimension: count_orders {
       label: "Total Lifetime Orders"
       description: "Distinct order count per user"
       type: number
+      sql: ${TABLE}.count_orders ;;
     }
     dimension: count_orders_tier {
       description: "Buckets of age groups:
@@ -30,7 +37,7 @@
       ● 6-9 Orders
       ● 10+ Orders"
       type:  tier
-      sql: ${count_orders} ;;
+      sql: IFNULL(${TABLE}.count_orders,0) ;;
       tiers: [1,2,3,6,10]
       style: integer
 
@@ -40,6 +47,7 @@
       description: "Total revenue from completed sales (cancelled and returned orders excluded)"
       value_format: "$#,##0.00"
       type: number
+      sql: ${TABLE}.total_gross_revenue ;;
     }
     dimension: total_gross_revenue_tier {
       description: "Buckets of Total revenue from completed sales (cancelled and returned orders excluded):
@@ -60,11 +68,13 @@
       label: "First Order Date"
       description: "A user's earliest or first order date"
       type: date
+      sql:  ${TABLE}.order_date_earliest ;;
     }
     dimension: order_date_latest {
       label: "Latest Order Date"
       description: "A user's latest or last order date"
       type: date
+      sql:  ${TABLE}.order_date_latest ;;
     }
     dimension: days_since_last_order {
       type:  number
@@ -93,6 +103,11 @@
       type: average
       sql:  ${total_gross_revenue} ;;
       value_format_name: usd
+    }
+    measure: count_distinct_users {
+      type:  count_distinct
+      sql: IFNULL(${TABLE}.user_id,0) ;;
+      value_format_name: decimal_0
     }
 
   }

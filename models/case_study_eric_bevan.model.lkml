@@ -9,14 +9,14 @@ include: "/views/users.view"
 include: "/views/distribution_centers.view"
 include: "/views/events.view"
 include: "/views/products.view"
-include: "/views/user_sales_rollup.view"
+include: "/views/ndt_user_sales_rollup.view"
 
 # Datagroups define a caching policy for an Explore. To learn more,
 # use the Quick Help panel on the right to see documentation.
 
 datagroup: case_study_eric_bevan_default_datagroup {
   # sql_trigger: SELECT MAX(id) FROM etl_log;;
-  max_cache_age: "1 hour"
+   max_cache_age: "1 hour"
 }
 
 persist_with: case_study_eric_bevan_default_datagroup
@@ -67,9 +67,11 @@ explore: events {
 
 explore: users {
   label: "Customers"
-  join: user_sales_rollup {
-    type: left_outer
-    sql_on: ${users.id} = ${user_sales_rollup.user_id} ;;
+  join: ndt_user_sales_rollup {
+    view_label: "User Sales Rollup"
+    #type: left_outer
+    type: inner  # excludes user that have no sales, or records in order_items
+    sql_on: ${users.id} = ${ndt_user_sales_rollup.user_id} ;;
     relationship: one_to_one
   }
 }

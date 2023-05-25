@@ -13,7 +13,7 @@
       }
 
 
-    # interval_trigger: "1 hour"
+     interval_trigger: "1 hour"
 
     }
     dimension: user_id {
@@ -40,6 +40,7 @@
       sql: IFNULL(${TABLE}.count_orders,0) ;;
       tiers: [1,2,3,6,10]
       style: integer
+      drill_fields: [users.age_tier]
 
     }
     dimension: total_gross_revenue {
@@ -88,6 +89,13 @@
     measure: average_days_since_last_order {
       type:  average
       sql:  ${days_since_last_order} ;;
+      value_format_name: decimal_0
+    }
+
+    measure: minimim_days_since_last_order{
+      type: min
+      sql:  ${days_since_last_order} ;;
+      value_format_name: decimal_0
     }
 
     measure: average_order_count {

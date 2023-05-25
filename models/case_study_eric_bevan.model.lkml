@@ -10,6 +10,7 @@ include: "/views/distribution_centers.view"
 include: "/views/events.view"
 include: "/views/products.view"
 include: "/views/ndt_user_sales_rollup.view"
+include: "/views/ndt_user_sales_monthly_rollup.view"
 
 # Datagroups define a caching policy for an Explore. To learn more,
 # use the Quick Help panel on the right to see documentation.
@@ -69,10 +70,17 @@ explore: users {
   label: "Customers"
   join: ndt_user_sales_rollup {
     view_label: "User Sales Rollup"
-    #type: left_outer
-    type: inner  # excludes user that have no sales, or records in order_items
+    type: left_outer
+    #type: inner  # excludes user that have no sales, or records in order_items
     sql_on: ${users.id} = ${ndt_user_sales_rollup.user_id} ;;
     relationship: one_to_one
+  }
+  join: ndt_user_sales_monthly_rollup {
+    view_label: "User Monthly Sales Rollup"
+    type:  left_outer
+    #type:  inner # excludes user that have no sales, or records in order_items
+    sql_on: ${users.id} = ${ndt_user_sales_monthly_rollup.user_id} ;;
+    relationship: one_to_many
   }
 }
 
@@ -83,6 +91,13 @@ explore: order_items {
     type: left_outer
     sql_on: ${order_items.user_id} = ${users.id} ;;
     relationship: many_to_one
+  }
+  join: ndt_user_sales_rollup {
+    view_label: "User Sales Rollup"
+    type: left_outer
+    #type: inner  # excludes user that have no sales, or records in order_items
+    sql_on: ${users.id} = ${ndt_user_sales_rollup.user_id} ;;
+    relationship: one_to_one
   }
 
   join: inventory_items {

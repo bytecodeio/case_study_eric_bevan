@@ -1,10 +1,11 @@
-  view: ndt_user_sales_monthly_rollup {
+  view: dt_user_sales_monthly_rollup {
     derived_table: {
     sql: SELECT
                 order_items.created_at  AS order_created_month,
                 order_items.user_id  AS user_id,
                 COALESCE(SUM(CASE WHEN ( order_items.status IN ('Completed','Shipped','Processing') ) THEN order_items.sale_price  ELSE NULL END), 0) AS monthly_gross_revenue
          FROM  `thelook.order_items`  AS order_items
+        WHERE  order_items.status IN ('Completed','Shipped','Processing')
          GROUP BY
                1,
                2 ;;

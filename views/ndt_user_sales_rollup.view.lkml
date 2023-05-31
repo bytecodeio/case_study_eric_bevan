@@ -9,12 +9,9 @@
         column: total_gross_revenue {}
         column: order_date_earliest {}
         column: order_date_latest {}
-       filters: [order_items.count_orders : "NOT NULL"]
+       filters: [order_items.count_orders : "NOT NULL", order_items.created_date : "before today", order_items.status: " IN ('Completed','Shipped','Processing') "]
       }
-
-
      interval_trigger: "1 hour"
-
     }
     dimension: user_id {
       description: "User Id"

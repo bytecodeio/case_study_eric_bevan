@@ -80,6 +80,8 @@ view: order_items {
     sql: ${TABLE}.returned_at ;;
   }
 
+
+
   dimension: sale_price {
     type: number
     sql: ${TABLE}.sale_price ;;
@@ -204,6 +206,11 @@ view: order_items {
     type:  number
     value_format_name: percent_1
     sql:  ${number_of_customers_with_sales} / NULLIF(${number_of_customers_returning_items}, 0);;
+  }
+
+  measure: item_repeat_customer_indicator {
+    type:  yesno
+    sql:  ${count_orders} > 1 ;;
   }
 
   measure: total_gross_revenue {

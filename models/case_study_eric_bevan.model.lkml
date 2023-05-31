@@ -10,7 +10,8 @@ include: "/views/distribution_centers.view"
 include: "/views/events.view"
 include: "/views/products.view"
 include: "/views/ndt_user_sales_rollup.view"
-include: "/views/ndt_user_sales_monthly_rollup.view"
+include: "/views/dt_user_sales_monthly_rollup.view"
+include: "/views/ndt_user_prodcat.view"
 
 # Datagroups define a caching policy for an Explore. To learn more,
 # use the Quick Help panel on the right to see documentation.
@@ -71,17 +72,16 @@ explore: users {
   join: ndt_user_sales_rollup {
     view_label: "User Sales Rollup"
     type: left_outer
-    #type: inner  # excludes user that have no sales, or records in order_items
     sql_on: ${users.id} = ${ndt_user_sales_rollup.user_id} ;;
     relationship: one_to_one
   }
-  join: ndt_user_sales_monthly_rollup {
+  join: dt_user_sales_monthly_rollup {
     view_label: "User Monthly Sales Rollup"
     type:  left_outer
-    #type:  inner # excludes user that have no sales, or records in order_items
-    sql_on: ${users.id} = ${ndt_user_sales_monthly_rollup.user_id} ;;
+    sql_on: ${users.id} = ${dt_user_sales_monthly_rollup.user_id} ;;
     relationship: one_to_many
   }
+
 }
 
 explore: order_items {
@@ -95,7 +95,6 @@ explore: order_items {
   join: ndt_user_sales_rollup {
     view_label: "User Sales Rollup"
     type: left_outer
-    #type: inner  # excludes user that have no sales, or records in order_items
     sql_on: ${users.id} = ${ndt_user_sales_rollup.user_id} ;;
     relationship: one_to_one
   }
@@ -110,12 +109,18 @@ explore: order_items {
     view_label: "Order Items"
     sql:  ;;
   relationship: one_to_one
-}
+  }
 
   join: products {
     type: left_outer
     sql_on: ${order_items.product_id} = ${products.id} ;;
     relationship: many_to_one
+  }
+
+  join: ndt_user_prodcat {
+    type:  left_outer
+    sql_on: ${order_items.user_id} = ${ndt_user_prodcat.user_id} AND ${products.category} = ${ndt_user_prodcat.category};;
+    relationship: many_to_many
   }
 
   join: distribution_centers {

@@ -4,7 +4,8 @@ view: order_items {
   # to be used for all fields in this view.
   sql_table_name: `thelook.order_items`
     ;;
-  drill_fields: [id]
+  drill_fields: [created_date, delivered_date, returned_date, sale_price, status]
+
   # This primary key is the unique key for this table in the underlying database.
   # You need to define a primary key in a view in order to join to other views.
 
@@ -29,6 +30,24 @@ view: order_items {
       year
     ]
     sql: ${TABLE}.created_at ;;
+  }
+
+  dimension: created_duration {
+    type: string
+    label_from_parameter: parameters.sales_duration
+    sql:{% if parameters.sales_duration._parameter_value == "'Day'" %}
+        ${created_date}
+        {% elsif parameters.sales_duration._parameter_value == "'Week'" %}
+        ${created_week}
+        {% elsif parameters.sales_duration._parameter_value == "'Month'" %}
+        ${created_month}
+        {% elsif parameters.sales_duration._parameter_value == "'Quarter'" %}
+        ${created_quarter}
+        {% elsif parameters.sales_duration._parameter_value == "'Year'" %}
+        ${created_year}
+        {% else %}
+        Null
+        {% endif %};;
   }
 
   dimension_group: delivered {
@@ -206,6 +225,15 @@ view: order_items {
     type:  number
     value_format_name: percent_1
     sql:  ${number_of_customers_with_sales} / NULLIF(${number_of_customers_returning_items}, 0);;
+  }
+
+  measure: sales_measure {
+    description: "This will displayed the sum total of the measure name chosen by the Sales Measure parameter"
+    type: sum
+    sql: ${TABLE}.{% parameter parameters.sales_measure %} ;;
+
+    # {% if parameter parameters.sales_measure == total_gross_revenue %}
+    # value_format_name: (% if parameter parameter_sales_measure like '%count%' %}
   }
 
   measure: item_repeat_customer_indicator {

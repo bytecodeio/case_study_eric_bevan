@@ -12,6 +12,7 @@ include: "/views/products.view"
 include: "/views/ndt_user_sales_rollup.view"
 include: "/views/dt_user_sales_monthly_rollup.view"
 include: "/views/ndt_user_prodcat.view"
+include: "/views/parameters/parameters.view"
 
 # Datagroups define a caching policy for an Explore. To learn more,
 # use the Quick Help panel on the right to see documentation.
@@ -106,6 +107,12 @@ explore: order_items {
   }
 
   join: inventory_cross_view {
+    view_label: "Order Items"
+    sql:  ;;
+  relationship: one_to_one
+  }
+
+  join: parameters {
     view_label: "Order Items"
     sql:  ;;
   relationship: one_to_one

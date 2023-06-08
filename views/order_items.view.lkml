@@ -227,13 +227,22 @@ view: order_items {
     sql:  ${number_of_customers_with_sales} / NULLIF(${number_of_customers_returning_items}, 0);;
   }
 
-  measure: sales_measure {
-    description: "This will displayed the sum total of the measure name chosen by the Sales Measure parameter"
-    type: sum
-    sql: ${TABLE}.{% parameter parameters.sales_measure %} ;;
+  # measure: sales_measure {
+  #   description: "This will displayed the sum total of the measure name chosen by the Sales Measure parameter"
+  #   label_from_parameter: parameters.sales_measure
+  #   type: sum
+  #   sql: {% parameter parameters.sales_measure %} ;;
 
     # {% if parameter parameters.sales_measure == total_gross_revenue %}
     # value_format_name: (% if parameter parameter_sales_measure like '%count%' %}
+  # }
+
+  measure: dynamic_sales_revenue {
+    description: "This will displayed the chosen aggregation of Sales Revenue"
+    label_from_parameter: parameters.sales_revenue
+    type: number
+    sql: {% parameter parameters.sales_revenue %}(${sale_price}) ;;
+    value_format_name: "usd"
   }
 
   measure: item_repeat_customer_indicator {

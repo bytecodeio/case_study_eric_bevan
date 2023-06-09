@@ -237,12 +237,24 @@ view: order_items {
     # value_format_name: (% if parameter parameter_sales_measure like '%count%' %}
   # }
 
+  measure: dynamic_sales_price {
+    description: "This will displayed the chosen aggregation of Sales Price"
+    label_from_parameter: parameters.param_sales_price
+    type: number
+    sql: {% parameter parameters.param_sales_price %}(${sale_price}) ;;
+    value_format_name: usd
+  }
+
+  #################### this measure has not been tested  #################################
   measure: dynamic_sales_revenue {
     description: "This will displayed the chosen aggregation of Sales Revenue"
-    label_from_parameter: parameters.sales_revenue
+    label_from_parameter: parameters.param_sales_revenue
     type: number
-    sql: {% parameter parameters.sales_revenue %}(${sale_price}) ;;
-    value_format_name: "usd"
+    sql: {% parameter parameters.param_sales_revenue %}(CASE WHEN ${status} IN ('Completed','Shipped','Processing') THEN  ${sale_price}) ELSE 0 END CASE)
+    value_format_name: usd
+    # filters: [sale_complete_indicator: "Yes"]
+    # {% condition status %} order_items.status {% endcondition %};;
+    drill_fields: [products.cateogry, products.name, total_gross_revenue]
   }
 
   measure: item_repeat_customer_indicator {

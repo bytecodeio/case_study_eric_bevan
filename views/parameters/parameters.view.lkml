@@ -33,12 +33,21 @@ view: parameters {
     # allowed_value: {value: "total_sale_price"}
   # }
 
-  parameter: sales_revenue {
+  parameter: param_sales_price {
     type:  unquoted
-    description: "Use this to pick a sales revenue metric on a look"
+    description: "Use this to pick a sales price metric on a look"
     allowed_value: {label: "Total Sales Price"  value: "SUM"}
     allowed_value: {label: "Average Sale Price" value: "AVG"}
     allowed_value: {label: "Min Sale Price"     value: "MIN"}
     allowed_value: {label: "Max Sale Price"     value: "MAX"}
+  }
+
+  parameter: param_sales_revenue {
+    type:  unquoted
+    description: "Use this to pick a sales revenue metric on a look"
+    allowed_value: {label: "Total Sales Revenue"  value: "SUM"}
+    allowed_value: {label: "Average Sale Revenue" value: "AVG"}
+    allowed_value: {label: "Min Sale Revenue"     value: "MIN"}
+    allowed_value: {label: "Max Sale Revenue"     value: "MAX"}
   }
 }

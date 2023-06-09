@@ -31,9 +31,21 @@ view: users {
   }
 
   dimension: new_customer_indicator {
+    description: "Indicates if a customer has signed up on the website in the last 90 days"
     type:  yesno
     sql: ${created_date} >= DATE_ADD(CURRENT_DATE(), INTERVAL -90 DAY);;
+  }
 
+  dimension: customer_signup_last_year_indicator {
+    description: "Indicates if the customer signup up to the website last year"
+    type:  yesno
+    sql: ${created_year} = FORMAT_DATE('%Y',current_date()) ;;
+  }
+
+  dimension: customer_signup_last_month_indicator {
+    description: "Indicates if the customer signup up the the website last month"
+    type: yesno
+    sql:  ${months_since_signup} = 1 ;;
   }
 
   # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
@@ -78,6 +90,31 @@ view: users {
     ]
     sql: ${TABLE}.created_at ;;
   }
+
+  dimension: days_since_signup {
+    description: "The number of days since a customer has signed up on the website"
+    type: number
+    sql:  DATE_DIFF(CURRENT_DATE(), DATE(users.created_at) , DAY) ;;
+  }
+
+  dimension: months_since_signup {
+    description: "The number of months since a customer has signed up on the website"
+    type: number
+    sql:  DATE_DIFF(CURRENT_DATE(), DATE(users.created_at) , MONTH) ;;
+  }
+
+  measure: average_days_since_signup {
+    description: "The average number of days since a customer has signed up on the website"
+    type: average
+    sql:  DATE_DIFF(CURRENT_DATE(), DATE(users.created_at) , DAY) ;;
+  }
+
+  measure: average_months_since_signup {
+    description: "The average number of months since a customer has signed up on the website"
+    type: average
+    sql:  DATE_DIFF(CURRENT_DATE(), DATE(users.created_at) , MONTH) ;;
+  }
+
 
   dimension: email {
     type: string

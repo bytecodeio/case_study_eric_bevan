@@ -39,13 +39,15 @@ view: users {
   dimension: customer_signup_last_year_indicator {
     description: "Indicates if the customer signup up to the website last year"
     type:  yesno
-    sql: ${created_year} = FORMAT_DATE('%Y',current_date()) ;;
+    # sql: ${created_year} = FORMAT_DATE('%Y', DATE_SUB(current_date(), INTERVAL 1 YEAR)) ;;
+    sql: cast( ${created_year} as integer) =    cast ( FORMAT_DATE('%Y',    DATE_SUB(current_date(), INTERVAL 1 YEAR))    as integer) ;;
   }
 
   dimension: customer_signup_last_month_indicator {
     description: "Indicates if the customer signup up the the website last month"
     type: yesno
-    sql:  ${months_since_signup} = 1 ;;
+    #sql:  ${months_since_signup} = 1 ;;
+    sql: cast( ${created_month} as string) =  cast(FORMAT_DATE('%Y-%m',    DATE_SUB(current_date(), INTERVAL 1 MONTH))  as string) ;;
   }
 
   # A measure is a field that uses a SQL aggregate function. Here are defined sum and average

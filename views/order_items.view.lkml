@@ -159,6 +159,13 @@ view: order_items {
     drill_fields: [users.age_tier, users.gender, average_spend_per_customer]
   }
 
+  measure: count_customers_with_current_month_sales {
+    description: "A count of users with orders in the current month"
+    type: count_distinct
+    sql: ${user_id}   ;;
+    filters: [created_month: "this month"]
+  }
+
   measure: count_order_items {
     type: count_distinct
     sql: ${id} ;;

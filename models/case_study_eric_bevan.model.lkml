@@ -12,6 +12,7 @@ include: "/views/products.view"
 include: "/views/ndt_user_sales_rollup.view"
 include: "/views/dt_user_sales_monthly_rollup.view"
 include: "/views/ndt_user_prodcat.view"
+include: "/views/derived_tables/dt_user_order_sequence.view"
 include: "/views/parameters/parameters.view"
 
 # Datagroups define a caching policy for an Explore. To learn more,
@@ -88,17 +89,29 @@ explore: users {
 explore: order_items {
   # group_label: "Online Store Analysis"
   label: "Sales"
+
   join: users {
     type: left_outer
     sql_on: ${order_items.user_id} = ${users.id} ;;
     relationship: many_to_one
   }
+
+
+
   join: ndt_user_sales_rollup {
     view_label: "User Sales Rollup"
     type: left_outer
     sql_on: ${users.id} = ${ndt_user_sales_rollup.user_id} ;;
     relationship: one_to_one
   }
+
+  join: dt_user_order_sequence {
+    view_label: "User Frequency"
+    type: left_outer
+     sql_on:  ${users.id} = ${dt_user_order_sequence.user_id};;
+    relationship: one_to_many
+  }
+
 
   join: inventory_items {
     type: left_outer

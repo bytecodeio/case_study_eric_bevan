@@ -118,6 +118,8 @@ view: users {
   }
 
 
+
+
   dimension: email {
     type: string
     sql: ${TABLE}.email ;;

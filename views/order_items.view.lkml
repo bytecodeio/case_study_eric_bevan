@@ -159,6 +159,15 @@ view: order_items {
     drill_fields: [users.age_tier, users.gender, average_spend_per_customer]
   }
 
+  measure: average_total_gross_revenue {
+    description: "Average total revenue from completed sales (cancelled and returned orders excluded)"
+    type: average
+    sql: ${sale_price} ;;
+    value_format_name: usd
+    filters: [sale_complete_indicator: "Yes"]
+    drill_fields: [product.brand, product.category, created_month, count_order_items, total_gross_revenue]
+  }
+
   measure: count_customers_with_current_month_sales {
     description: "A count of users with orders in the current month"
     type: count_distinct
@@ -171,6 +180,8 @@ view: order_items {
     sql: ${id} ;;
     drill_fields: [detail*]
   }
+
+
 
   measure: count_orders {
     type: count_distinct

@@ -12,7 +12,9 @@ include: "/views/products.view"
 include: "/views/ndt_user_sales_rollup.view"
 include: "/views/dt_user_sales_monthly_rollup.view"
 include: "/views/ndt_user_prodcat.view"
-include: "/views/derived_tables/dt_user_order_sequence.view"
+include: "/views/derived_tables/dt_order_item_sequence.view"
+include: "/views/order_item_sequence_cross_view.view"
+include: "/views/derived_tables/dt_user_order_items.view"
 include: "/views/parameters/parameters.view"
 
 # Datagroups define a caching policy for an Explore. To learn more,
@@ -58,6 +60,18 @@ explore: products {
     sql_on: ${products.distribution_center_id} = ${distribution_centers.id} ;;
     relationship: many_to_one
   }
+
+  join: order_items {
+    type: left_outer
+    sql_on: ${products.id} = ${order_items.product_id} ;;
+    relationship: one_to_many
+    fields: [order_items.product_id,
+      order_items.count_order_items,
+      order_items.sale_complete_indicator,
+      order_items.total_gross_revenue,
+      order_items.created_month,
+      order_items.average_total_gross_revenue]
+  }
 }
 
 explore: events {
@@ -96,6 +110,13 @@ explore: order_items {
     relationship: many_to_one
   }
 
+  join: dt_user_order_items {
+    view_label: "Users"
+    type: left_outer
+    sql_on: ${users.id} = ${dt_user_order_items.user_id} ;;
+    relationship: one_to_one
+  }
+
 
 
   join: ndt_user_sales_rollup {
@@ -105,11 +126,18 @@ explore: order_items {
     relationship: one_to_one
   }
 
-  join: dt_user_order_sequence {
-    view_label: "User Frequency"
-    type: left_outer
-     sql_on:  ${users.id} = ${dt_user_order_sequence.user_id};;
-    relationship: one_to_many
+  join: dt_order_item_sequence {
+    from: dt_order_item_sequence
+    view_label: "Order Items Frequency"
+    type: inner
+    sql_on:  ${order_items.id} = ${dt_order_item_sequence.id};;
+    relationship: one_to_one
+  }
+
+  join: order_item_sequence_cross_view {
+    view_label: "Order Items Frequency"
+    sql:  ;;
+  relationship: one_to_one
   }
 
 

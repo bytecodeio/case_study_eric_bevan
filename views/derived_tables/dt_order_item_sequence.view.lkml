@@ -37,19 +37,21 @@ SELECT  --user_id,
     sql: ${TABLE}.user_order_sequence ;;
   }
 
-  dimension_group: next_order_date {
-    type: time
-    hidden: yes
+  dimension: next_order_date {
+    description: "Create Date of next order item"
+    type: date
     sql: ${TABLE}.next_order_date ;;
   }
 
   dimension: days_until_next_order {
+    description: "The number of days between the current and next order item create date"
     type: number
     sql: ${TABLE}.days_until_next_order ;;
   }
 
 
   dimension: first_order_indicator {
+    description: "Indicates if the current order items was the first created"
     type: yesno
     sql:  ${user_order_sequence} = 1 ;;
   }
@@ -61,19 +63,20 @@ SELECT  --user_id,
     value_format_name: decimal_0
   }
 
-  dimension: customer_has_subequent_orders_indicator {
+  dimension: customer_has_subsequent_orders_indicator {
     description: "Indicator for whether or not a customer placed a subsequent order on the website"
     type: yesno
     sql:  ${user_order_sequence} > 1 ;;
   }
 
 
-  dimension: customers_subsequent_60_day_purchase_indicator {
+  dimension: subsequent_60_day_purchase_indicator {
+    description: "Indicates if next order item was created within 60 days of the current item"
     type: yesno
     sql:  ${days_until_next_order}  <= 60 ;;
   }
 
   set: detail {
-    fields: [id, user_order_sequence, next_order_date_time, days_until_next_order]
+    fields: [user_order_sequence, next_order_date, days_until_next_order]
   }
 }

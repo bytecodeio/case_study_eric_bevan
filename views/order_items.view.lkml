@@ -165,7 +165,7 @@ view: order_items {
     sql: ${sale_price} ;;
     value_format_name: usd
     filters: [sale_complete_indicator: "Yes"]
-    drill_fields: [product.brand, product.category, created_month, count_order_items, total_gross_revenue]
+    drill_fields: [product.brand, product.category, total_gross_revenue]
   }
 
   measure: count_customers_with_current_month_sales {
@@ -178,7 +178,7 @@ view: order_items {
   measure: count_order_items {
     type: count_distinct
     sql: ${id} ;;
-    drill_fields: [detail*]
+    drill_fields: [products.brand, products.category, count_order_items]
   }
 
 

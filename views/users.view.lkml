@@ -96,25 +96,33 @@ view: users {
   dimension: days_since_signup {
     description: "The number of days since a customer has signed up on the website"
     type: number
-    sql:  DATE_DIFF(CURRENT_DATE(), DATE(users.created_at) , DAY) ;;
+    sql:  DATE_DIFF(CURRENT_DATE(), ${created_date} , DAY) ;;
   }
 
   dimension: months_since_signup {
     description: "The number of months since a customer has signed up on the website"
     type: number
-    sql:  DATE_DIFF(CURRENT_DATE(), DATE(users.created_at) , MONTH) ;;
+    sql:  DATE_DIFF(CURRENT_DATE(), ${created_date} , MONTH) ;;
+  }
+
+  ########## GO BACK AND TEST SUBSTRITUTION FOR DIMS ABOVE   #############
+  dimension_group: signup_duration {
+    type: duration
+    timeframes: [date, month]
+    sql_start: ${created_date} ;;
+    sql_end:  CURRENT_DATE() ;;
   }
 
   measure: average_days_since_signup {
     description: "The average number of days since a customer has signed up on the website"
     type: average
-    sql:  DATE_DIFF(CURRENT_DATE(), DATE(users.created_at) , DAY) ;;
+    sql:  ${days_since_signup} ;;
   }
 
   measure: average_months_since_signup {
     description: "The average number of months since a customer has signed up on the website"
     type: average
-    sql:  DATE_DIFF(CURRENT_DATE(), DATE(users.created_at) , MONTH) ;;
+    sql:  ${months_since_signup} ;;
   }
 
 

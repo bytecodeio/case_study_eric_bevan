@@ -98,6 +98,14 @@ explore: users {
     relationship: one_to_many
   }
 
+  # The following provides lifetime_order_count to the Users for use in measures
+  join: dt_user_order_items {
+    view_label: "Users"
+    type:  inner
+    sql_on: ${users.id} = ${dt_user_order_items.user_id} ;;
+    relationship: one_to_one
+  }
+
 }
 
 explore: order_items {

@@ -17,6 +17,10 @@ include: "/views/order_item_sequence_cross_view.view"
 include: "/views/derived_tables/dt_user_order_items.view"
 include: "/views/parameters/parameters.view"
 
+include: "/views/order_grain/dt_order_rollup.view"
+include: "/views/order_grain/dt_order_rollup_users.view"
+include: "/views/order_grain/order_rollup_users_cross_view.view"
+
 # Datagroups define a caching policy for an Explore. To learn more,
 # use the Quick Help panel on the right to see documentation.
 
@@ -37,6 +41,48 @@ persist_with: case_study_eric_bevan_default_datagroup
 # To create more sophisticated Explores that involve multiple views, you can use the join parameter.
 # Typically, join parameters require that you define the join type, join relationship, and a sql_on clause.
 # Each joined view also needs to define a primary key.
+
+
+# This explore intends to provide subsequent purchase frequency at the Order grain while still allowing user and product level analysis
+explore: dt_order_rollup {
+  label: "Order"
+  join: order_items {
+    relationship: one_to_many
+    sql_on: ${dt_order_rollup.order_id} = ${order_items.order_id} ;;
+    type: inner
+  }
+
+  join: parameters {
+    relationship: one_to_one
+    sql_on:   ;;
+  }
+
+  join: inventory_items {
+    relationship: one_to_many
+    type:  left_outer
+    sql_on: ${inventory_items.id} = ${order_items.inventory_item_id} ;;
+  }
+
+  join: users {
+    relationship: one_to_many
+    type: left_outer
+    sql_on: ${users.id} = ${dt_order_rollup.user_id} ;;
+  }
+
+  join: dt_order_rollup_users {
+    view_label: "Users"
+    relationship: one_to_one
+    type: left_outer
+    sql_on:  ${users.id} = ${dt_order_rollup_users.user_id};;
+  }
+
+  join: order_rollup_users_cross_view {
+    view_label: "Users"
+    relationship: one_to_one
+    sql:  ;;
+  }
+
+}
 
 explore: distribution_centers {}
 

@@ -108,8 +108,8 @@ view: users {
   ########## GO BACK AND TEST SUBSTRITUTION FOR DIMS ABOVE   #############
   dimension_group: signup_duration {
     type: duration
-    timeframes: [date, month]
-    sql_start: ${created_date} ;;
+    intervals : [day, month]
+    sql_start: ${created_raw} ;;
     sql_end:  CURRENT_DATE() ;;
   }
 

@@ -186,7 +186,7 @@ view: order_items {
   measure: count_orders {
     type: count_distinct
     sql: ${order_id} ;;
-    drill_fields: [detail*]
+    drill_fields: [products.brand, products.cateogry, products.name, count_orders]
   }
 
   measure: cumulative_total_sales_price {

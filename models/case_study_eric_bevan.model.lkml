@@ -43,7 +43,9 @@ persist_with: case_study_eric_bevan_default_datagroup
 # Each joined view also needs to define a primary key.
 
 
+
 # This explore intends to provide subsequent purchase frequency at the Order grain while still allowing user and product level analysis
+###  CASE STUDY 3
 explore: dt_order_rollup {
   label: "Order"
   join: order_items {
@@ -98,9 +100,23 @@ explore: inventory_items {
     sql_on: ${products.distribution_center_id} = ${distribution_centers.id} ;;
     relationship: many_to_one
   }
+
+  # join: order_items {
+  #   type: left_outer
+  #   sql_on: ${inventory_items.id} = ${order_items.inventory_item_id} ;;
+  #   relationship: one_to_one
+  #   fields: [order_items.product_id,
+  #     order_items.inventory_item_id,
+  #     order_items.count_order_items,
+  #     order_items.sale_complete_indicator,
+  #     order_items.total_gross_revenue,
+  #     order_items.created_month]
+  #   #   order_items.average_total_gross_revenue]
+  # }
 }
 
 explore: products {
+
   join: distribution_centers {
     type: left_outer
     sql_on: ${products.distribution_center_id} = ${distribution_centers.id} ;;
@@ -111,13 +127,27 @@ explore: products {
     type: left_outer
     sql_on: ${products.id} = ${order_items.product_id} ;;
     relationship: one_to_many
-    fields: [order_items.product_id,
-      order_items.count_order_items,
-      order_items.sale_complete_indicator,
-      order_items.total_gross_revenue,
-      order_items.created_month,
-      order_items.average_total_gross_revenue]
   }
+
+  join: inventory_items {
+    type: left_outer
+    sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
+    relationship: one_to_one
+  }
+
+  ## CAN'T COMPUTE DISTINCT VALUE, MISSING PRIMARY KEY IN INVENTORY_CROSS_VIEW :(((
+  join: inventory_cross_view {
+      view_label: "Order Items"
+      sql:  ;;
+     relationship: one_to_one
+  }
+
+  join: parameters {
+    view_label: "Order Items"
+    sql:  ;;
+  relationship: one_to_one
+  }
+
 }
 
 explore: events {

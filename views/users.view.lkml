@@ -19,13 +19,13 @@ view: users {
   # This dimension will be called "Age" in Explore.
 
   dimension: age {
-    hidden: yes
+    # hidden: yes
     type: number
     sql: ${TABLE}.age ;;
   }
 
   dimension: age_tier {
-    hidden: yes
+    # hidden: yes
     type:  tier
     tiers: [15, 26, 36, 51, 66]
     sql: ${age} ;;
@@ -186,4 +186,15 @@ view: users {
     sql: ${id} ;;
     drill_fields: [id, last_name, first_name, events.count, order_items.count]
   }
+
+
+  # measure: total_age {
+  #   type: sum
+  #   sql: ${age} ;;
+  # }
+
+  # measure: average_age {
+  #   type: average
+  #   sql: ${age} ;;
+  # }
 }

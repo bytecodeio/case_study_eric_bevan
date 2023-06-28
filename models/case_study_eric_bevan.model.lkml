@@ -21,6 +21,8 @@ include: "/views/order_grain/dt_order_rollup.view"
 include: "/views/order_grain/dt_order_rollup_users.view"
 include: "/views/order_grain/order_rollup_users_cross_view.view"
 
+include: "/views/users_age_extend.view"
+
 # Datagroups define a caching policy for an Explore. To learn more,
 # use the Quick Help panel on the right to see documentation.
 

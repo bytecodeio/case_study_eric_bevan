@@ -19,11 +19,13 @@ view: users {
   # This dimension will be called "Age" in Explore.
 
   dimension: age {
+    hidden: yes
     type: number
     sql: ${TABLE}.age ;;
   }
 
   dimension: age_tier {
+    hidden: yes
     type:  tier
     tiers: [15, 26, 36, 51, 66]
     sql: ${age} ;;
@@ -54,15 +56,15 @@ view: users {
   # measures for this dimension, but you can also add measures of many different aggregates.
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
-  measure: total_age {
-    type: sum
-    sql: ${age} ;;
-  }
+  # measure: total_age {
+  #   type: sum
+  #   sql: ${age} ;;
+  # }
 
-  measure: average_age {
-    type: average
-    sql: ${age} ;;
-  }
+  # measure: average_age {
+  #   type: average
+  #   sql: ${age} ;;
+  # }
 
   dimension: city {
     type: string
@@ -110,7 +112,7 @@ view: users {
     type: duration
     intervals : [day, month]
     sql_start: ${created_raw} ;;
-    sql_end:  CURRENT_DATE() ;;
+    sql_end:  CURRENT_TIMESTAMP() ;;
   }
 
   measure: average_days_since_signup {

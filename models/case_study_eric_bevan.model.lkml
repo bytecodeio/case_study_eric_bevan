@@ -33,6 +33,17 @@ datagroup: case_study_eric_bevan_default_datagroup {
 
 persist_with: case_study_eric_bevan_default_datagroup
 
+## SECURITY ##
+access_grant: can_see_orders_items {
+  allowed_values: ["yes"]
+  user_attribute: access_grant_demo
+}
+access_grant: sales_access {
+  allowed_values: ["sales","executive"]
+  user_attribute: case_study_department
+}
+
+
 # Explores allow you to join together different views (database tables) based on the
 # relationships between fields. By joining a view into an Explore, you make those
 # fields available to users for data analysis.
@@ -49,7 +60,9 @@ persist_with: case_study_eric_bevan_default_datagroup
 # This explore intends to provide subsequent purchase frequency at the Order grain while still allowing user and product level analysis
 ###  CASE STUDY 3
 explore: dt_order_rollup {
+  required_access_grants: [sales_access]
   label: "Order"
+
   join: order_items {
     relationship: one_to_many
     sql_on: ${dt_order_rollup.order_id} = ${order_items.order_id} ;;
@@ -187,6 +200,8 @@ explore: users {
 }
 
 explore: order_items {
+  required_access_grants: [can_see_orders_items]
+
   # group_label: "Online Store Analysis"
   label: "Sales"
 

@@ -1,5 +1,9 @@
+include: "users_age_extend.view"
 # The name of this view in Looker is "Users"
 view: users {
+
+  extends: [users_age_extend]
+
   # The sql_table_name parameter indicates the underlying database table
   # to be used for all fields in this view.
   sql_table_name: `thelook.users`
@@ -18,19 +22,19 @@ view: users {
   # A dimension is a groupable field that can be used to filter query results.
   # This dimension will be called "Age" in Explore.
 
-  dimension: age {
-    # hidden: yes
-    type: number
-    sql: ${TABLE}.age ;;
-  }
+  # dimension: age {
+  #   hidden: yes
+  #   type: number
+  #   sql: ${TABLE}.age ;;
+  # }
 
-  dimension: age_tier {
-    # hidden: yes
-    type:  tier
-    tiers: [15, 26, 36, 51, 66]
-    sql: ${age} ;;
-    style:  integer
-  }
+  # dimension: age_tier {
+  #   hidden: yes
+  #   type:  tier
+  #   tiers: [15, 26, 36, 51, 66]
+  #   sql: ${age} ;;
+  #   style:  integer
+  # }
 
   dimension: new_customer_indicator {
     description: "Indicates if a customer has signed up on the website in the last 90 days"

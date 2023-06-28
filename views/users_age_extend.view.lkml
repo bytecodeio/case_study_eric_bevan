@@ -1,6 +1,6 @@
 include: "/views/users.view"
 view: users_age_extend {
-  extends: [users]
+  # extends: [users]
   extension: required
 
   dimension: age {

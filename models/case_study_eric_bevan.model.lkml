@@ -39,14 +39,14 @@ datagroup: max_order_item_created {
 persist_with: case_study_eric_bevan_default_datagroup
 
 ## SECURITY ##
-access_grant: can_see_orders_items {
-  allowed_values: ["yes"]
-  user_attribute: access_grant_demo
-}
-access_grant: sales_access {
-  allowed_values: ["sales", "executive"]
-  user_attribute: case_study_department
-}
+# access_grant: can_see_orders_items {
+#   allowed_values: ["yes"]
+#   user_attribute: access_grant_demo
+# }
+# access_grant: sales_access {
+#   allowed_values: ["sales", "executive"]
+#   user_attribute: case_study_department
+# }
 
 
 # Explores allow you to join together different views (database tables) based on the
@@ -215,7 +215,7 @@ explore: users {
 }
 
 explore: order_items {
-  required_access_grants: [can_see_orders_items]
+  # required_access_grants: [can_see_orders_items]
 
   # group_label: "Online Store Analysis"
   label: "Sales"

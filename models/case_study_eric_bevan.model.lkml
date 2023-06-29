@@ -67,7 +67,7 @@ access_grant: sales_access {
 explore: dt_order_rollup {
 
   persist_with: max_order_item_created
-  required_access_grants: [sales_access]
+  # required_access_grants: [sales_access]
   label: "Order"
 
   join: order_items {
@@ -182,7 +182,15 @@ explore: events {
 }
 
 explore: users {
+
+  # required_access_grants: [sales_access]
+  access_filter: {
+    field: country
+    user_attribute: case_study_country
+  }
   label: "Customers"
+
+
   join: ndt_user_sales_rollup {
     view_label: "User Sales Rollup"
     type: left_outer

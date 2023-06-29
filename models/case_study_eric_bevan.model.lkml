@@ -184,10 +184,10 @@ explore: events {
 explore: users {
 
   # required_access_grants: [sales_access]
-  access_filter: {
-    field: country
-    user_attribute: case_study_country
-  }
+  # access_filter: {
+  #   field: users.country
+  #   user_attribute: case_study_country
+  # }
   label: "Customers"
 
 

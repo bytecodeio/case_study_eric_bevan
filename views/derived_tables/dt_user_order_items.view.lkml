@@ -10,6 +10,9 @@ view: dt_user_order_items {
            ON users.id = order_items.user_id
  GROUP BY  users.id
       ;;
+
+      # persist_for: "4 hours"
+      datagroup_trigger: max_order_item_created
   }
 
   dimension: user_id {

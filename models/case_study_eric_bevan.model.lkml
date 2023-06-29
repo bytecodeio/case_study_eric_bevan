@@ -28,7 +28,12 @@ include: "/views/users_age_extend.view"
 
 datagroup: case_study_eric_bevan_default_datagroup {
   # sql_trigger: SELECT MAX(id) FROM etl_log;;
-   max_cache_age: "1 hour"
+   max_cache_age: "24 hours"
+}
+
+datagroup: max_order_item_created {
+  sql_trigger:  SELECT MAX(order_items.created_at) FROM order_items;;
+  max_cache_age: "24 hours"
 }
 
 persist_with: case_study_eric_bevan_default_datagroup
@@ -39,7 +44,7 @@ access_grant: can_see_orders_items {
   user_attribute: access_grant_demo
 }
 access_grant: sales_access {
-  allowed_values: ["sales","executive"]
+  allowed_values: ["sales", "executive"]
   user_attribute: case_study_department
 }
 
@@ -60,6 +65,8 @@ access_grant: sales_access {
 # This explore intends to provide subsequent purchase frequency at the Order grain while still allowing user and product level analysis
 ###  CASE STUDY 3
 explore: dt_order_rollup {
+
+  persist_with: max_order_item_created
   required_access_grants: [sales_access]
   label: "Order"
 
@@ -218,8 +225,6 @@ explore: order_items {
     relationship: one_to_one
   }
 
-
-
   join: ndt_user_sales_rollup {
     view_label: "User Sales Rollup"
     type: left_outer
@@ -240,7 +245,6 @@ explore: order_items {
     sql:  ;;
   relationship: one_to_one
   }
-
 
   join: inventory_items {
     type: left_outer

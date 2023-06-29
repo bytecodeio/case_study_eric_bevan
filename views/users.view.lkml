@@ -16,6 +16,7 @@ view: users {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
+
   }
 
   # Here's what a typical dimension looks like in LookML.

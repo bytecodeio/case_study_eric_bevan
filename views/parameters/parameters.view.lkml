@@ -23,6 +23,10 @@ view: parameters {
       label: "Year Durations"
       value: "Year"
     }
+    allowed_value: {
+      label: "Month Name Durations (PoP)"
+      value: "Month Name"
+    }
   }
 
   # parameter: sales_measure {

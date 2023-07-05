@@ -26,6 +26,8 @@ view: order_items {
       date,
       week,
       month,
+      month_name,
+      month_num,
       quarter,
       year
     ]
@@ -45,6 +47,8 @@ view: order_items {
         ${created_quarter}
         {% elsif parameters.sales_duration._parameter_value == "'Year'" %}
         ${created_year}
+        {% elsif parameters.sales_duration._parameter_value == "'Month Name'" %}
+        ${created_month_name}
         {% else %}
         Null
         {% endif %};;
@@ -136,6 +140,38 @@ view: order_items {
     type: yesno
     sql:  ${status} IN ('Completed','Shipped','Processing') ;;
   }
+
+  ######## test pop dimensions
+  dimension: mtd_only {
+    group_label: "To-Date Filters"
+    label: "MTD"
+    view_label: "_PoP"
+    type: yesno
+    sql:  (EXTRACT(DAY FROM ${created_raw}) < EXTRACT(DAY FROM CURRENT_DATE())
+                    OR
+                (EXTRACT(DAY FROM ${created_raw}) = EXTRACT(DAY FROM CURRENT_DATE()) AND
+                EXTRACT(HOUR FROM ${created_raw}) < EXTRACT(HOUR FROM CURRENT_DATETIME()))
+                    OR
+                (EXTRACT(DAY FROM ${created_raw}) = EXTRACT(DAY FROM CURRENT_DATE()) AND
+                EXTRACT(HOUR FROM ${created_raw}) <= EXTRACT(HOUR FROM CURRENT_DATETIME()) AND
+                EXTRACT(MINUTE FROM ${created_raw}) < EXTRACT(MINUTE FROM CURRENT_DATETIME())))  ;;
+  }
+
+  dimension: ytd_only {
+    group_label: "To-Date Filters"
+    label: "YTD"
+    view_label: "_PoP"
+    type: yesno
+    sql:  (EXTRACT(DAYOFYEAR FROM ${created_raw}) < EXTRACT(DAY FROM CURRENT_DATE())
+                    OR
+                (EXTRACT(DAYOFYEAR FROM ${created_raw}) = EXTRACT(DAY FROM CURRENT_DATE()) AND
+                EXTRACT(HOUR FROM ${created_raw}) < EXTRACT(HOUR FROM CURRENT_DATETIME()))
+                    OR
+                (EXTRACT(DAYOFYEAR FROM ${created_raw}) = EXTRACT(DAY FROM CURRENT_DATE()) AND
+                EXTRACT(HOUR FROM ${created_raw}) <= EXTRACT(HOUR FROM CURRENT_DATETIME()) AND
+                EXTRACT(MINUTE FROM ${created_raw}) < EXTRACT(MINUTE FROM CURRENT_DATETIME())))  ;;
+  }
+
 
 
 

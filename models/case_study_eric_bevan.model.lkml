@@ -68,7 +68,7 @@ explore: dt_order_rollup {
 
   persist_with: max_order_item_created
   # required_access_grants: [sales_access]
-  label: "Order"
+  label: "@{test} Order"  ## NOTE:  @{test} references a constant parameter from the manifest file
 
   join: order_items {
     relationship: one_to_many
@@ -184,10 +184,10 @@ explore: events {
 explore: users {
 
   # required_access_grants: [sales_access]
-  # access_filter: {
-  #   field: users.country
-  #   user_attribute: case_study_country
-  # }
+  access_filter: {
+    field: users.country
+    user_attribute: case_study_country
+  }
   label: "Customers"
 
 

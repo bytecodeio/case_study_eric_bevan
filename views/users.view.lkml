@@ -199,7 +199,7 @@ view: users {
   # }
 
   measure: average_age {
-    type: number
-    sql: avg(${age}) ;;
+    type: average
+    sql: ${age} ;;
   }
 }

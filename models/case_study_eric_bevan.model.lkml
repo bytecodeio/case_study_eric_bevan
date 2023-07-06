@@ -36,6 +36,7 @@ datagroup: max_order_item_created {
   max_cache_age: "24 hours"
 }
 
+
 persist_with: case_study_eric_bevan_default_datagroup
 
 ## SECURITY ##

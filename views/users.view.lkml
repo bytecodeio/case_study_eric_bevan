@@ -193,10 +193,10 @@ view: users {
   }
 
 
-  # measure: total_age {
-  #   type: sum
-  #   sql: ${age} ;;
-  # }
+  measure: total_age {
+    type: sum
+    sql: ${age} ;;
+  }
 
   measure: average_age {
     type: average

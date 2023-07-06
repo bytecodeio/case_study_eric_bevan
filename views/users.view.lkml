@@ -202,4 +202,12 @@ view: users {
     type: average
     sql: ${age} ;;
   }
+  measure: min_age {
+    type: min
+    sql: ${age} ;;
+  }
+  measure: max_age {
+    type: max
+    sql: ${age} ;;
+  }
 }

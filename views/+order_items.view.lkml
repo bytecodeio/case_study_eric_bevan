@@ -13,7 +13,7 @@ view: +order_items {#!Update to point to your view name (with the '+' making it 
         {% assign now_unconverted_sql = pop_support.now_sql._sql %} --{%comment%}pulling in logic from pop support template, within which we'll inject the original sql. Use $ {::date} when we want to get looker to do conversions, but _sql to extract raw sql {%endcomment%}
         {% assign selected_period_size = selected_period_size._sql | strip %}
 
-        {% if selected_period_size == 'Day' %}{% assign pop_sql_using_now = "${pop_support.pop_sql_days_using_now}" %}
+        {% if    selected_period_size == 'Day' %}  {% assign pop_sql_using_now = "${pop_support.pop_sql_days_using_now}" %}
         {% elsif selected_period_size == 'Month' %}{% assign pop_sql_using_now = "${pop_support.pop_sql_months_using_now}" %}
         {% else %}{% assign pop_sql_using_now = "${pop_support.pop_sql_years_using_now}" %}{% endif %}
         {% assign my_date_converted = now_converted_to_date_with_timezone_sql | replace:now_unconverted_sql,"${EXTENDED}" %}
@@ -30,7 +30,7 @@ view: +order_items {#!Update to point to your view name (with the '+' making it 
 
   dimension: selected_period_size {
     hidden: yes
-    sql:{%if pop_support.period_size._parameter_value != 'Default'%}{{pop_support.period_size._parameter_value}}
+    sql:{% if pop_support.period_size._parameter_value != 'Default' %}{{pop_support.period_size._parameter_value}}
         {% else %}
         {% if created_date._is_selected %}Day
         {% elsif created_month._is_selected %}Month
@@ -45,8 +45,8 @@ view: +order_items {#!Update to point to your view name (with the '+' making it 
     group_label: "Created Date" #!Update this group label if necessary to make it fall in your date field's group_label
     order_by_field: pop_support.periods_ago #sort numerically/chronologically.
     sql:{% assign period_label_sql = "${pop_support.period_label_sql}" %}
-        {% assign selected_period_size = selected_period_size._sql | strip%}
-        {% assign label_using_selected_period_size = period_label_sql | replace: 'REPLACE_WITH_PERIOD',selected_period_size%}{{label_using_selected_period_size}};;#makes intuitive period labels
+        {% assign selected_period_size = selected_period_size._sql | strip %}
+        {% assign label_using_selected_period_size = period_label_sql | replace: 'REPLACE_WITH_PERIOD',selected_period_size %}{{label_using_selected_period_size}};;#makes intuitive period labels
 
   }
 

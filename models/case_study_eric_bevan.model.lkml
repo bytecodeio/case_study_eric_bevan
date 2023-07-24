@@ -22,6 +22,8 @@ include: "/views/order_grain/dt_order_rollup_users.view"
 include: "/views/order_grain/order_rollup_users_cross_view.view"
 
 include: "/views/users_age_extend.view"
+include: "/views/pop_support.view"
+include: "/views/+order_items.view"
 
 # Datagroups define a caching policy for an Explore. To learn more,
 # use the Quick Help panel on the right to see documentation.
@@ -70,6 +72,17 @@ explore: dt_order_rollup {
   persist_with: max_order_item_created
   # required_access_grants: [sales_access]
   label: "@{test} Order"  ## NOTE:  @{test} references a constant parameter from the manifest file
+
+  join: pop_support {
+    view_label: "PoP Support - Overrides and Tools"
+    #(Optionally) Update view label for use in this explore here, rather than in pop_support view. You might choose to align this to your POP date's view label.
+    relationship:one_to_one #we are intentionally fanning out, so this should stay one_to_one
+
+    sql:{% if pop_support.periods_ago._in_query%}LEFT JOIN pop_support on 1=1{%endif%};;
+    #join and fannout data for each prior_period included **if and only if** lynchpin pivot field (periods_ago) is selected.
+    # This safety measure ensures we dont fire any fannout join if the user selected PoP parameters from pop support but didn't actually select a pop pivot field.
+
+  }
 
   join: order_items {
     relationship: one_to_many
@@ -139,6 +152,17 @@ explore: inventory_items {
 }
 
 explore: products {
+
+  join: pop_support {
+    view_label: "PoP Support - Overrides and Tools"
+    #(Optionally) Update view label for use in this explore here, rather than in pop_support view. You might choose to align this to your POP date's view label.
+    relationship:one_to_one #we are intentionally fanning out, so this should stay one_to_one
+
+    sql:{% if pop_support.periods_ago._in_query%}LEFT JOIN pop_support on 1=1{%endif%};;
+    #join and fannout data for each prior_period included **if and only if** lynchpin pivot field (periods_ago) is selected.
+    # This safety measure ensures we dont fire any fannout join if the user selected PoP parameters from pop support but didn't actually select a pop pivot field.
+
+  }
 
   join: distribution_centers {
     type: left_outer
@@ -220,6 +244,18 @@ explore: order_items {
 
   # group_label: "Online Store Analysis"
   label: "Sales"
+
+  join: pop_support {
+    view_label: "PoP Support - Overrides and Tools"
+    #(Optionally) Update view label for use in this explore here, rather than in pop_support view. You might choose to align this to your POP date's view label.
+    relationship:one_to_one #we are intentionally fanning out, so this should stay one_to_one
+
+    sql:{% if pop_support.periods_ago._in_query%}LEFT JOIN pop_support on 1=1{%endif%};;
+    #join and fannout data for each prior_period included **if and only if** lynchpin pivot field (periods_ago) is selected.
+    # This safety measure ensures we dont fire any fannout join if the user selected PoP parameters from pop support but didn't actually select a pop pivot field.
+
+  }
+
 
   join: users {
     type: left_outer

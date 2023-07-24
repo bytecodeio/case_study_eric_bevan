@@ -206,4 +206,8 @@ view: users {
     type: min
     sql: ${age} ;;
   }
+  measure: max_age {
+    type: max
+    sql: ${age} ;;
+  }
 }

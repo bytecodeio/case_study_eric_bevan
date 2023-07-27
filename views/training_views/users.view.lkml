@@ -1,7 +1,9 @@
 # The name of this view in Looker is "Users"
 view: users {
+
   # The sql_table_name parameter indicates the underlying database table
   # to be used for all fields in this view.
+
   sql_table_name: `looker-partners.thelook.users` ;;
   drill_fields: [id]
 
@@ -59,6 +61,7 @@ view: users {
   }
 
   dimension: first_name {
+    # group_label: "Customer Name"
     type: string
     sql: ${TABLE}.first_name ;;
   }
@@ -69,9 +72,12 @@ view: users {
   }
 
   dimension: last_name {
+    # group_label: "Customer Name"
     type: string
     sql: ${TABLE}.last_name ;;
   }
+
+
 
   dimension: latitude {
     type: number

@@ -77,13 +77,7 @@ view: users {
     sql: ${TABLE}.last_name ;;
   }
 
-  dimension: full_name {
-    group_label: "Customer Name"
-    description: "The combined customer first and last name"
-    type: string
-    sql: ${first_name} || ' ' || ${last_name};;
-  }
-
+## Add a customer full name dimension for usability
 
 
   dimension: latitude {
@@ -115,8 +109,10 @@ view: users {
     type: string
     sql: ${TABLE}.traffic_source ;;
   }
-  measure: count {
+  measure: count_user_ids {
     type: count
     drill_fields: [id, last_name, first_name]
   }
+
+
 }

@@ -8,7 +8,7 @@ connection: "looker_partner_demo"
 
 include: "/views/training_views/users.view.lkml"
 include: "/views/training_views/order_items.view.lkml"
-# include: "/views/training_views/training_derived_tables/"
+# include: "/views/training_views/training_derived_tables/*.view.lkml"
 
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 

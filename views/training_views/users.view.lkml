@@ -14,6 +14,7 @@ view: users {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
+    value_format_name: id
   }
     # Here's what a typical dimension looks like in LookML.
     # A dimension is a groupable field that can be used to filter query results.
@@ -61,7 +62,7 @@ view: users {
   }
 
   dimension: first_name {
-    group_label: "Customer Name"
+    # group_label: "Customer Name"
     type: string
     sql: ${TABLE}.first_name ;;
   }
@@ -72,7 +73,6 @@ view: users {
   }
 
   dimension: last_name {
-    group_label: "Customer Name"
     type: string
     sql: ${TABLE}.last_name ;;
   }
@@ -109,10 +109,12 @@ view: users {
     type: string
     sql: ${TABLE}.traffic_source ;;
   }
-  measure: count_user_ids {
+  measure: count {
     type: count
     drill_fields: [id, last_name, first_name]
   }
+
+
 
 
 }

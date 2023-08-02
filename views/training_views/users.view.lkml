@@ -78,7 +78,11 @@ view: users {
     sql: ${TABLE}.last_name ;;
   }
 
-## Add a customer full name dimension for usability
+  dimension: full_name {
+     group_label: "Customer Name"
+    type:  string
+    sql: ${first_name} || ' ' || ${last_name} ;;
+  }
 
 
 

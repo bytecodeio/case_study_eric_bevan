@@ -10,7 +10,6 @@ include: "/views/training_views/users.view.lkml"
 include: "/views/training_views/order_items.view.lkml"
 
 
-
 # include: "/explores/order_items.explore.lkml"
 
 

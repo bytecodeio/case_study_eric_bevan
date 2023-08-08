@@ -21,3 +21,9 @@ explore: order_items {
     type:  left_outer
   }
 }
+
+include: "/views/training_views/training_derived_tables/dt_state_sales_rollup.view.lkml"
+
+explore:  regional_sales {
+  from: dt_state_sales_rollup
+}

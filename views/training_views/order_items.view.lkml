@@ -68,6 +68,12 @@ view: order_items {
   }
 
   #### Add a cumulative total sale price
+  measure: total_sale_price_cumulative   {
+    description: "A running sum of total sales, based on how results are sorted"
+    type: running_total
+    sql:  ${total_sale_price};;
+    value_format_name: usd
+  }
 
 
 

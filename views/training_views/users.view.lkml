@@ -79,7 +79,11 @@ view: users {
   }
 
   ### Add a full customer name dimension
-
+  dimension: full_name {
+    group_label: "Customer Name"
+    type: string
+    sql: ${first_name} || " " || ${last_name};;
+  }
 
 
 
